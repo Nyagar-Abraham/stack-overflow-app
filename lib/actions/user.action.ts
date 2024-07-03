@@ -27,7 +27,7 @@ export async function getUserById(params: GetUserByIdParams) {
 	}
 }
 
-export async function createUser(userdata: CreateUserParams) {
+export async function createUser(userData: CreateUserParams) {
 	try {
 		connectToDatabase();
 
