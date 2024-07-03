@@ -1,9 +1,10 @@
 import { clerkMiddleware } from '@clerk/nextjs/server';
 
 export default clerkMiddleware({
-	publicRoutes: [
-		'/',
+	ignoredRoutes: [
 		'/api/webhook',
+		'/api/chatgpt',
+		'/',
 		'/question/:id',
 		'/tags',
 		'/tags/:id',
@@ -11,7 +12,6 @@ export default clerkMiddleware({
 		'/community',
 		'/jobs',
 	],
-	ignoredRoutes: ['/api/webhook', '/api/chatgpt'],
 });
 
 export const config = {
