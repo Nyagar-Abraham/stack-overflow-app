@@ -3,12 +3,11 @@
 import {
 	Select,
 	SelectContent,
-	SelectItem,
 	SelectGroup,
+	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { Button } from '../ui/button';
 
 interface Props {
 	filters: {

@@ -1,10 +1,9 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignedIn, UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
-import Theme from './Theme';
-import MobileNav from './MobileNav';
 import Globalsearch from '../search/Globalsearch';
+import MobileNav from './MobileNav';
+import Theme from './Theme';
 
 const NavBar = () => {
 	return (

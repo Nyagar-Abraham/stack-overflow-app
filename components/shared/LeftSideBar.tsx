@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 'use client';
 import { sidebarLinks } from '@/constants';
 import { SignedOut } from '@clerk/nextjs';

@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable camelcase */
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
