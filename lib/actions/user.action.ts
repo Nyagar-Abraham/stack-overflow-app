@@ -1,6 +1,5 @@
-/* eslint-disable spaced-comment */
 'use server';
-
+/* eslint-disable spaced-comment */
 import User from '@/database/user.model';
 import { connectToDatabase } from '../mongoose';
 import {
