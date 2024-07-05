@@ -2,6 +2,7 @@ import Link from 'next/link';
 import RenderTag from '../shared/RenderTag';
 import Metric from '../shared/Metric';
 import { formatBigNumber, getTimestamp } from '@/lib/utils';
+import { IMG } from '@/constants';
 
 interface QuestionProps {
 	_id: string;
@@ -15,7 +16,7 @@ interface QuestionProps {
 		name: string;
 		picture: string;
 	};
-	upvotes: number;
+	upvotes: string[];
 	views: number;
 	answers: Array<object>;
 	createdAt: Date;
@@ -49,15 +50,15 @@ const QuestionsCard = ({
 
 			<div className="mt-3.5 flex flex-wrap gap-2">
 				{tags.map((tag) => (
-					<RenderTag key={tag._id} name={tag.name} _id={tag._id} />
+					<RenderTag key={tag?._id} name={tag?.name} _id={tag?._id} />
 				))}
 			</div>
 
 			<div className="flex-between mt-6 w-full flex-wrap gap-3">
 				<Metric
-					imgUrl={author?.picture}
+					imgUrl={IMG}
 					alt="user"
-					value={author.name}
+					value={author?.name}
 					title={`-asked ${getTimestamp(createdAt)}`}
 					href={`/profile/${author._id}`}
 					textStyles="body-medium text-dark400_light700"
@@ -66,7 +67,7 @@ const QuestionsCard = ({
 				<Metric
 					imgUrl="/assets/icons/like.svg"
 					alt="upvotes"
-					value={formatBigNumber(upvotes)}
+					value={formatBigNumber(upvotes.length)}
 					title="Votes"
 					textStyles="small-medium text-dark400_light800"
 				/>
