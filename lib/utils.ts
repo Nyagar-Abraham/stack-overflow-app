@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getTimestamp = (createdAt: Date): string => {
 	const now = new Date();
-	const diffInMs = now.getTime() - createdAt.getTime();
+	const diffInMs = now.getTime() - createdAt?.getTime();
 	const diffInSeconds = Math.floor(diffInMs / 1000);
 	const diffInMinutes = Math.floor(diffInSeconds / 60);
 	const diffInHours = Math.floor(diffInMinutes / 60);
@@ -41,4 +41,15 @@ export const formatBigNumber = (num: number): string => {
 	} else {
 		return num.toString();
 	}
+};
+
+export const getJoinedDate = (date: Date): string => {
+	const options: Intl.DateTimeFormatOptions = {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	};
+
+	const formattedDate = date.toLocaleDateString(undefined, options);
+	return `Joined on ${formattedDate}`;
 };

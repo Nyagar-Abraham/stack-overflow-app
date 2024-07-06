@@ -1,8 +1,10 @@
-import Link from 'next/link';
-import RenderTag from '../shared/RenderTag';
-import Metric from '../shared/Metric';
-import { formatBigNumber, getTimestamp } from '@/lib/utils';
 import { IMG } from '@/constants';
+import { formatBigNumber, getTimestamp } from '@/lib/utils';
+import { SignedIn } from '@clerk/nextjs';
+import Link from 'next/link';
+import EditDeleteAction from '../shared/EditDeleteAction';
+import Metric from '../shared/Metric';
+import RenderTag from '../shared/RenderTag';
 
 interface QuestionProps {
 	_id: string;
@@ -20,9 +22,11 @@ interface QuestionProps {
 	views: number;
 	answers: Array<object>;
 	createdAt: Date;
+	clerkId?: string;
 }
 
 const QuestionsCard = ({
+	clerkId,
 	_id,
 	title,
 	tags,
@@ -32,6 +36,8 @@ const QuestionsCard = ({
 	answers,
 	createdAt,
 }: QuestionProps) => {
+	const showActionButtons = clerkId && clerkId === author?.clerkId;
+
 	return (
 		<div className="card-wrapper rounded-[10px] p-9 sm:px-11 ">
 			<div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -45,7 +51,11 @@ const QuestionsCard = ({
 						</h3>
 					</Link>
 				</div>
-				{/* if signed in add edit delete actions */}
+				<SignedIn>
+					{showActionButtons && (
+						<EditDeleteAction type="question" itemId={JSON.stringify(_id)} />
+					)}
+				</SignedIn>
 			</div>
 
 			<div className="mt-3.5 flex flex-wrap gap-2">

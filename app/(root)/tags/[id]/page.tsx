@@ -1,41 +1,34 @@
 import QuestionsCard from '@/components/cards/QuestionsCard';
-import Filter from '@/components/shared/Filter';
 import NoResult from '@/components/shared/NoResult';
 import LocalSearchBar from '@/components/shared/search/LocalSearchBar';
-import { QuestionFilters } from '@/constants/filters';
-import { getSavedQuestions } from '@/lib/actions/user.action';
-import { auth } from '@clerk/nextjs/server';
+import { IQuestion } from '@/database/question.modal';
+import { getQuestionsByTagId } from '@/lib/actions/tag.actions';
+import { URLProps } from '@/types';
 
-const page = async () => {
-	const { userId } = auth();
-
-	if (!userId) return null;
-
-	const { savedQuestions: questions } = await getSavedQuestions({
-		clerkId: 'clerk12345',
+const Page = async ({ params, searchParams }: URLProps) => {
+	const { questions, tagTitle } = await getQuestionsByTagId({
+		tagId: params.id,
+		page: 1,
+		searchQuery: searchParams.p,
 	});
 
 	return (
 		<>
-			<h1 className="h1-bold text-dark100_light900">saved Questions</h1>
+			<h1 className="h1-bold text-dark100_light900">{tagTitle}</h1>
 
-			<div className="mt-11  flex justify-between gap-5 max-sm:flex-col sm:items-center   ">
+			<div className="mt-11 w-full ">
 				<LocalSearchBar
 					route="/"
 					iconPosition="left"
 					imgSrc="/assets/icons/search.svg"
-					placeholder="search questions..."
+					placeholder="search tag questions"
 					otherClasses="flex-1"
-				/>
-				<Filter
-					filters={QuestionFilters}
-					otherClasses="min-h-[56px] sm:min-w-[170px]"
 				/>
 			</div>
 
 			<div className="mt-10 flex w-full flex-col gap-6 ">
 				{questions?.length > 0 ? (
-					questions.map((question:any) => (
+					questions.map((question: IQuestion) => (
 						<QuestionsCard
 							key={question._id}
 							_id={question._id}
@@ -50,10 +43,10 @@ const page = async () => {
 					))
 				) : (
 					<NoResult
-						title="There's no saved question to show"
+						title="There's no tag question to show"
 						description="Be the first to break the silence! 🚀Ask a Question and kickstart the
-				discussion. our query could be the next big thing others learn from. Get
-				involved! 💡"
+    discussion. our query could be the next big thing others learn from. Get
+    involved! 💡"
 						link="/ask-question"
 						linkTitle="Ask a Question"
 					/>
@@ -63,4 +56,4 @@ const page = async () => {
 	);
 };
 
-export default page;
+export default Page;
