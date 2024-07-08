@@ -1,15 +1,23 @@
+/* eslint-disable spaced-comment */
 import QuestionsCard from '@/components/cards/QuestionsCard';
 import HomeFilters from '@/components/home/HomeFilters';
 import Filter from '@/components/shared/Filter';
 import NoResult from '@/components/shared/NoResult';
+import Pagination from '@/components/shared/Pagination';
 import LocalSearchBar from '@/components/shared/search/LocalSearchBar';
 import { Button } from '@/components/ui/button';
 import { HomePageFilters } from '@/constants/filters';
 import { getQuestions } from '@/lib/actions/question.action';
+import { SearchParamsProps } from '@/types';
 import Link from 'next/link';
 
-const page = async () => {
-	const { questions } = await getQuestions({});
+const Page = async ({ searchParams }: SearchParamsProps) => {
+	const { questions, isNext } = await getQuestions({
+		searchQuery: searchParams.q,
+		filter: searchParams.filter,
+		page: searchParams?.page ? +searchParams.page : 1,
+	});
+	//fetch recommended;
 
 	return (
 		<>
@@ -64,8 +72,14 @@ const page = async () => {
 					/>
 				)}
 			</div>
+			<div className="mt-10">
+				<Pagination
+					pageNumber={searchParams?.page ? +searchParams.page : 1}
+					isNext={isNext}
+				/>
+			</div>
 		</>
 	);
 };
 
-export default page;
+export default Page;

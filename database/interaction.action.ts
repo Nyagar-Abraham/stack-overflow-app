@@ -1,5 +1,5 @@
 import { Schema, models, model, Document } from 'mongoose';
-import { string } from 'zod';
+
 
 export interface IInteraction extends Document {
 	user: Schema.Types.ObjectId;

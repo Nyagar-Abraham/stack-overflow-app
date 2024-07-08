@@ -17,13 +17,40 @@ export async function getAnswer(params: GetAnswersParams) {
 	try {
 		connectToDatabase();
 
-		const { questionId } = params;
+		const { questionId, sortBy, page, pageSize } = params;
+
+		const skipAmount = (page - 1) * pageSize;
+
+		let sortOptions = {};
+
+		switch (sortBy?.toLowerCase()) {
+			case 'highestupvotes':
+				sortOptions = { upvotes: -1 };
+				break;
+			case 'lowestupvotes':
+				sortOptions = { upvotes: 1 };
+				break;
+			case 'old':
+				sortOptions = { createdAt: 1 };
+				break;
+			case 'recent':
+				sortOptions = { createdAt: -1 };
+				break;
+			default:
+				break;
+		}
 
 		const answers = await Answer.find({ question: questionId })
 			.populate('author', '_id clerkId name picture')
-			.sort({ createdAt: -1 });
+			.sort(sortOptions)
+			.skip(skipAmount)
+			.limit(1);
 
-		return { answers };
+		const totalAnswers = await Answer.countDocuments({ question: questionId });
+
+		const isNext = totalAnswers > skipAmount + answers.length;
+
+		return { answers, isNext };
 	} catch (error) {}
 }
 

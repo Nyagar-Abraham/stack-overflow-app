@@ -41,9 +41,43 @@ export async function getAllTags(params: GetAllTagsParams) {
 	try {
 		connectToDatabase();
 
-		const tags = await Tag.find({}).sort({ createdOn: -1 });
+		const { searchQuery, filter, page = 1, pageSize = 1 } = params;
 
-		return { tags };
+		const skipAmount = (page - 1) * pageSize;
+
+		const query: FilterQuery<typeof Tag> = {};
+
+		if (searchQuery) {
+			query.$or = [{ name: { $regex: new RegExp(searchQuery, 'i') } }];
+		}
+
+		let sortOptions = {};
+
+		switch (filter) {
+			case 'recent':
+				sortOptions = { createdOn: -1 };
+				break;
+			case 'popular':
+				sortOptions = { questions: -1 };
+				break;
+			case 'name':
+				sortOptions = { name: 1 };
+				break;
+			case 'old':
+				sortOptions = { createdOn: 1 };
+				break;
+		}
+
+		const tags = await Tag.find(query)
+			.skip(skipAmount)
+			.limit(pageSize)
+			.sort(sortOptions);
+
+		const totalsTags = await Tag.countDocuments(query);
+
+		const isNext = totalsTags > skipAmount + tags.length;
+
+		return { tags, isNext };
 	} catch (error) {
 		console.log(error);
 		throw error;
@@ -54,7 +88,9 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
 	try {
 		connectToDatabase();
 
-		const { tagId, page = 1, pageSize = 10, searchQuery } = params;
+		const { tagId, searchQuery, page = 1, pageSize = 1 } = params;
+
+		const skipAmount = (page - 1) * pageSize;
 
 		const tagFilter: FilterQuery<ITag> = { _id: tagId };
 
@@ -62,10 +98,12 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
 			path: 'questions',
 			model: Question,
 			match: searchQuery
-				? { title: { $regex: searchQuery, $options: '1' } }
+				? { title: { $regex: searchQuery, $options: 'i' } }
 				: {},
 			options: {
 				sort: { createdAt: -1 },
+				skip: skipAmount,
+				limit: pageSize + 1, //to check if their is a next page,
 			},
 			populate: [
 				{ path: 'tags', model: Tag, select: '_id name' },
@@ -73,19 +111,39 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
 			],
 		});
 
+		const isNext = tag.questions.length > pageSize;
+
 		if (!tag) {
-			throw new Error('Tag not found')
+			throw new Error('Tag not found');
 		}
 
 		const questions = tag.questions;
 
-		return {tagTitle:tag.name,questionscou}
+		return { tagTitle: tag.name, questions, isNext };
 	} catch (error) {
 		console.log(error);
 		throw error;
 	}
 }
 
+export async function getPopularTags() {
+	try {
+		connectToDatabase();
+
+		const popularTags = await Tag.aggregate([
+			{
+				$project: { name: 1, numberOfQuestions: { $size: '$questions' } },
+			},
+			{ $sort: { numberOfQuestions: -1 } },
+			{ $limit: 5 },
+		]);
+
+		return popularTags;
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+}
 // export async function getAllUsers(params: GetAllUsersParams) {
 // 	try {
 // 		connectToDatabase();

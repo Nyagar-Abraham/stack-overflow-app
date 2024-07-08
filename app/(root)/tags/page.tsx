@@ -1,12 +1,19 @@
 import Filter from '@/components/shared/Filter';
 import NoResult from '@/components/shared/NoResult';
+import Pagination from '@/components/shared/Pagination';
 import LocalSearchBar from '@/components/shared/search/LocalSearchBar';
 import { TagFilters } from '@/constants/filters';
 import { getAllTags } from '@/lib/actions/tag.actions';
+import { SearchParamsProps } from '@/types';
 import Link from 'next/link';
 
-const Page = async () => {
-	const { tags } = await getAllTags({});
+const Page = async ({ searchParams }: SearchParamsProps) => {
+	const { tags, isNext } = await getAllTags({
+		searchQuery: searchParams.q,
+		filter: searchParams.filter,
+		page: searchParams?.page ? +searchParams.page : 3,
+		pageSize: 1,
+	});
 
 	return (
 		<>
@@ -14,7 +21,7 @@ const Page = async () => {
 
 			<div className="mt-11  flex justify-between gap-5 max-sm:flex-col sm:items-center   ">
 				<LocalSearchBar
-					route="/community"
+					route="/tags"
 					iconPosition="left"
 					imgSrc="/assets/icons/search.svg"
 					placeholder="search amazing minds"
@@ -59,6 +66,13 @@ const Page = async () => {
 					/>
 				)}
 			</section>
+
+			<div className="mt-10">
+				<Pagination
+					pageNumber={searchParams?.page ? +searchParams.page : 1}
+					isNext={isNext}
+				/>
+			</div>
 		</>
 	);
 };
