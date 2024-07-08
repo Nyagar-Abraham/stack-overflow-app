@@ -18,9 +18,10 @@ const clerkId = 'clerk12345';
 
 const page = async ({ params, searchParams }: URLProps) => {
 	const { userId } = auth();
-	const { user, totalQuestions, totalAnswers } = await getUserInfo({
-		userId: params.userId,
-	});
+	const { user, totalQuestions, totalAnswers, badgeCounts, reputation } =
+		await getUserInfo({
+			userId: params.userId,
+		});
 
 	return (
 		<>
@@ -79,7 +80,12 @@ const page = async ({ params, searchParams }: URLProps) => {
 				</div>
 			</div>
 
-			<Stats totalQuestions={totalQuestions} totalAnswers={totalAnswers} />
+			<Stats
+				reputation={reputation}
+				totalQuestions={totalQuestions}
+				totalAnswers={totalAnswers}
+				badge={badgeCounts}
+			/>
 
 			<div className="mt-10 flex gap-10">
 				<Tabs defaultValue="account" className="flex-1">
