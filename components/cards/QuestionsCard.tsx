@@ -17,12 +17,13 @@ interface QuestionProps {
 		_id: string;
 		name: string;
 		picture: string;
+		clerkId: string;
 	};
 	upvotes: string[];
 	views: number;
 	answers: Array<object>;
 	createdAt: Date;
-	clerkId?: string;
+	clerkId?: string|null;
 }
 
 const QuestionsCard = ({
@@ -74,27 +75,29 @@ const QuestionsCard = ({
 					textStyles="body-medium text-dark400_light700"
 					isAuthor
 				/>
-				<Metric
-					imgUrl="/assets/icons/like.svg"
-					alt="upvotes"
-					value={formatBigNumber(upvotes.length)}
-					title="Votes"
-					textStyles="small-medium text-dark400_light800"
-				/>
-				<Metric
-					imgUrl="/assets/icons/message.svg"
-					alt="message"
-					value={formatBigNumber(answers.length)}
-					title="Answers"
-					textStyles="small-medium text-dark400_light800"
-				/>
-				<Metric
-					imgUrl="/assets/icons/eye.svg"
-					alt="eye"
-					value={formatBigNumber(views)}
-					title="Views"
-					textStyles="small-medium text-dark400_light800"
-				/>
+				<div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
+					<Metric
+						imgUrl="/assets/icons/like.svg"
+						alt="upvotes"
+						value={formatBigNumber(upvotes.length)}
+						title="Votes"
+						textStyles="small-medium text-dark400_light800"
+					/>
+					<Metric
+						imgUrl="/assets/icons/message.svg"
+						alt="message"
+						value={formatBigNumber(answers.length)}
+						title="Answers"
+						textStyles="small-medium text-dark400_light800"
+					/>
+					<Metric
+						imgUrl="/assets/icons/eye.svg"
+						alt="eye"
+						value={formatBigNumber(views)}
+						title="Views"
+						textStyles="small-medium text-dark400_light800"
+					/>
+				</div>
 			</div>
 		</div>
 	);

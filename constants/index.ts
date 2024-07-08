@@ -72,6 +72,5 @@ export const BADGE_CRITERIA = {
 	},
 };
 
-
 export const IMG =
 	'https://images.pexels.com/photos/16035532/pexels-photo-16035532/free-photo-of-camping-car-dans-la-nature-en-norvege-avec-un-ciel-bleu.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';

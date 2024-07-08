@@ -29,6 +29,7 @@ interface Props {
 const Answer = ({ question, questionId, authorId }: Props) => {
 	const pathname = usePathname();
 	const [isSubmitting, setSubmitting] = useState(false);
+	const [isSubmittingAI, setSubmittingAI] = useState(false);
 	const editorRef = useRef(null);
 	const { mode } = useTheme();
 
@@ -64,6 +65,37 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 		}
 	};
 
+	const handleGenerateAIAnswer = async () => {
+		if (!authorId) return;
+
+		setSubmittingAI(true);
+
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgpt`,
+				{
+					method: 'POST',
+					body: JSON.stringify({ question }),
+				}
+			);
+
+			const aiAnswer = await response.json();
+
+			//convert plain to html
+			const formattedAnswer = aiAnswer.reply.replace(/\n/g, '<br/>');
+
+			if (editorRef.current) {
+				const editor = editorRef.current as any;
+				editor.setContent(formattedAnswer);
+			}
+			//Toast
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setSubmittingAI(false);
+		}
+	};
+
 	return (
 		<div>
 			<div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
@@ -72,8 +104,9 @@ const Answer = ({ question, questionId, authorId }: Props) => {
 				</h4>
 
 				<Button
+					disabled={isSubmittingAI}
 					className="btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-					onSubmit={() => {}}
+					onClick={handleGenerateAIAnswer}
 				>
 					<Image
 						src="/assets/icons/stars.svg"

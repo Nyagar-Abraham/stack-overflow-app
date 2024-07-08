@@ -1,4 +1,5 @@
 /* eslint-disable spaced-comment */
+
 import QuestionsCard from '@/components/cards/QuestionsCard';
 import HomeFilters from '@/components/home/HomeFilters';
 import Filter from '@/components/shared/Filter';
@@ -7,16 +8,52 @@ import Pagination from '@/components/shared/Pagination';
 import LocalSearchBar from '@/components/shared/search/LocalSearchBar';
 import { Button } from '@/components/ui/button';
 import { HomePageFilters } from '@/constants/filters';
-import { getQuestions } from '@/lib/actions/question.action';
+import {
+	getQuestions,
+	getRecommendedQuestions,
+} from '@/lib/actions/question.action';
 import { SearchParamsProps } from '@/types';
+
+import { Metadata } from 'next';
 import Link from 'next/link';
 
+export const metadata: Metadata = {
+	title: 'Home | Dev Overflow',
+};
+
+const user = 'clerk12345';
+
 const Page = async ({ searchParams }: SearchParamsProps) => {
-	const { questions, isNext } = await getQuestions({
-		searchQuery: searchParams.q,
-		filter: searchParams.filter,
-		page: searchParams?.page ? +searchParams.page : 1,
-	});
+	//@ts-ignore
+
+	let result;
+
+	if (searchParams?.filter === 'recommended') {
+		if (user) {
+			result = await getRecommendedQuestions({
+				userId: user,
+				searchQuery: searchParams.q,
+
+				page: searchParams?.page ? +searchParams.page : 1,
+				pageSize: 5,
+			});
+		} else {
+			result = {
+				questions: [],
+				isNext: false,
+			};
+		}
+	} else {
+		result = await getQuestions({
+			searchQuery: searchParams.q,
+			filter: searchParams.filter,
+			page: searchParams?.page ? +searchParams.page : 1,
+			pageSize: 5,
+		});
+	}
+
+	const { questions, isNext } = result;
+
 	//fetch recommended;
 
 	return (

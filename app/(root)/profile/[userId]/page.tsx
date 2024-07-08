@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button } from '@/components/ui/button';
 import { IMG } from '@/constants';
 import { getUserInfo } from '@/lib/actions/user.action';
@@ -16,7 +17,8 @@ import AnswerTab from '@/components/shared/AnswerTab';
 
 const clerkId = 'clerk12345';
 
-const page = async ({ params, searchParams }: URLProps) => {
+const page = async ({ params, searchParams }: any) => {
+	// @ts-ignore
 	const { userId } = auth();
 	const { user, totalQuestions, totalAnswers, badgeCounts, reputation } =
 		await getUserInfo({
@@ -97,7 +99,10 @@ const page = async ({ params, searchParams }: URLProps) => {
 							Answer
 						</TabsTrigger>
 					</TabsList>
-					<TabsContent value="top-posts">
+					<TabsContent
+						value="top-posts"
+						className="mt-5 flex w-full flex-col gap-6"
+					>
 						<QuestionsTab
 							searchParams={searchParams}
 							userId={user._id}

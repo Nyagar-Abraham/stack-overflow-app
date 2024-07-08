@@ -22,7 +22,7 @@ const Globalsearch = () => {
 		const handleOutClick = (event: any) => {
 			if (
 				searchContainerRef.current &&
-				//@ts-ignore
+				// @ts-ignore
 				!searchContainerRef.current.contains(event.target)
 			) {
 				setIsOpen(false);
@@ -65,6 +65,7 @@ const Globalsearch = () => {
 
 	return (
 		<div
+			// @ts-ignore
 			ref={searchContainerRef}
 			className="relative w-full max-w-[600px] max-lg:hidden"
 		>
@@ -86,7 +87,7 @@ const Globalsearch = () => {
 						if (e.target.value === '' && isOpen) setIsOpen(false);
 					}}
 					placeholder="search globally"
-					className="paragraph-regular no-focus placeholder background-light800_darkgradient border-none shadow-none outline-none text-dark400_light700"
+					className="paragraph-regular no-focus placeholder  text-dark400_light700 border-none bg-transparent shadow-none outline-none"
 				/>
 			</div>
 			{isOpen && <GlobalResult />}

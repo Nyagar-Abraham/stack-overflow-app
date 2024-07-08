@@ -1,6 +1,5 @@
 import { Schema, models, model, Document } from 'mongoose';
 
-
 export interface IInteraction extends Document {
 	user: Schema.Types.ObjectId;
 	action: string;
