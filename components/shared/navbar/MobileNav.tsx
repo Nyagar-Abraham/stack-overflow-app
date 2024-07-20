@@ -5,7 +5,7 @@ import {
 	Sheet,
 	SheetClose,
 	SheetContent,
-	SheetTrigger
+	SheetTrigger,
 } from '@/components/ui/sheet';
 import { sidebarLinks } from '@/constants';
 import { SignedOut } from '@clerk/nextjs';
@@ -15,7 +15,6 @@ import { usePathname } from 'next/navigation';
 
 const NavContent = () => {
 	const pathname = usePathname();
-	console.log(pathname);
 
 	return (
 		<section className="flex  h-full  flex-col gap-6 pt-16">
@@ -61,7 +60,7 @@ const MobileNav = () => {
 			</SheetTrigger>
 			<SheetContent
 				side="left"
-				className="background-light900_dark200 border-none "
+				className="background-light900_dark200 border-none w-10/12 "
 			>
 				<Link href="/" className="flex items-center gap-1">
 					<Image

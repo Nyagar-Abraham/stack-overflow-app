@@ -10,7 +10,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-	const [mode, setMode] = useState('');
+	const [mode, setMode] = useState();
 
 	const handleThemeChange = () => {
 		if (
@@ -18,9 +18,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 			(!('theme' in localStorage) &&
 				window.matchMedia('(prefers-color-scheme: dark)').matches)
 		) {
+			// @ts-ignore
 			setMode('dark');
 			document.documentElement.classList.add('dark');
 		} else {
+			// @ts-ignore
 			setMode('light');
 			document.documentElement.classList.remove('dark');
 		}
@@ -31,6 +33,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [mode]);
 
 	return (
+		// @ts-ignore
 		<ThemeContext.Provider value={{ mode, setMode }}>
 			{children}
 		</ThemeContext.Provider>

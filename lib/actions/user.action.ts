@@ -66,7 +66,7 @@ export async function deleteUser(params: DeleteUserParams) {
 		connectToDatabase();
 		const { clerkId } = params;
 
-		const user = await User.findOneAndDelete({ clerkId });
+		await User.findOneAndDelete({ clerkId });
 
 		if (!user) {
 			throw new Error('User not found');
@@ -116,7 +116,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
 				sortOptions = { joinedAt: -1 };
 				break;
 			case 'old_users':
-				sortOptions = { sortOptions: 1 };
+				sortOptions = { joinedAt: 1 };
 				break;
 			case 'top_contributors':
 				sortOptions = { reputation: -1 };

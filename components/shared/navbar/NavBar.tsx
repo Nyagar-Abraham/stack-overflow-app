@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 import { SignedIn, UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -33,7 +34,8 @@ const NavBar = () => {
 								colorPrimary: '#ff7000',
 							},
 						}}
-						afterSignOutUrl="/"
+						//@ts-ignore
+						fallbackRedirectUrl="/"
 					/>
 				</SignedIn>
 				<MobileNav />

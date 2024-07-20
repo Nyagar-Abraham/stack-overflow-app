@@ -9,6 +9,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { formUrlQuery } from '@/lib/utils';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 interface Props {
@@ -18,9 +19,10 @@ interface Props {
 	}[];
 	otherClasses?: string;
 	containerClasses?: string;
+	route?: string;
 }
 
-const Filter = ({ filters, otherClasses, containerClasses }: Props) => {
+const Filter = ({ filters, otherClasses, containerClasses, route }: Props) => {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 
@@ -45,7 +47,15 @@ const Filter = ({ filters, otherClasses, containerClasses }: Props) => {
 				<SelectTrigger
 					className={`${otherClasses} body-regular light-border background-light800_dark300 text-dark500_light700 border px-5 py-2.5`}
 				>
-					<div className="line-clamp-1 flex-1 text-left">
+					<div className="line-clamp-1 flex-1 text-left gap-2 flex items-center">
+						{route === '/jobs' && (
+							<Image
+								src="/assets/icons/location.svg"
+								width={16}
+								height={16}
+								className="rounded-full object-contain invert "
+							/>
+						)}
 						<SelectValue placeholder="select a filter" />
 					</div>
 				</SelectTrigger>
