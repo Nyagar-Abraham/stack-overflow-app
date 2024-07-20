@@ -99,7 +99,7 @@ export async function POST(req: Request) {
 		const { id } = evt.data;
 
 		const deletedUser = await deleteUser({
-			clerkId: id!,
+			clerkId: 'clerk12345',
 		});
 
 		return NextResponse.json({ message: 'ok', user: deletedUser });
