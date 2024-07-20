@@ -50,6 +50,7 @@ const Filter = ({ filters, otherClasses, containerClasses, route }: Props) => {
 					<div className="line-clamp-1 flex-1 text-left gap-2 flex items-center">
 						{route === '/jobs' && (
 							<Image
+								alt='location icon'
 								src="/assets/icons/location.svg"
 								width={16}
 								height={16}
